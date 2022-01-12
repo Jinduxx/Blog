@@ -78,7 +78,7 @@ public class PostController {
     }
 
     @GetMapping("/allPost")
-    public List<PostDto> showAllPost(HttpSession session, Model model) {
+    public Object showAllPost(HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
         List<PostDto> post = postService.getAllPost(user);
 
@@ -87,8 +87,18 @@ public class PostController {
         return post;
     }
 
+    @GetMapping("/friendsPosts")
+    public Object showAllFriendsPost(HttpSession session, Model model) {
+        User user = (User) session.getAttribute("user");
+        List<PostDto> post = postService.getAllFriendsPost(user.getId(), user);
+
+        model.addAttribute("postData", post);
+        model.addAttribute("user", user);
+        return post;
+    }
+
     @GetMapping("/favouritePost")
-    public List<PostDto> showAllFavouritePost(HttpSession session, Model model) {
+    public Object showAllFavouritePost(HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
         List<PostDto> post = postService.getAllFavouritePost(user);
 

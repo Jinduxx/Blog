@@ -11,9 +11,7 @@ import com.blog.repository.repositoryImpl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -164,12 +162,13 @@ public class PostServiceImpl implements PostService {
     public List<PostDto> getAllFriendsPost(long userId, User currentUser) {
 
         List<PostDto> posts1 = new ArrayList<>();
-        List<FriendDto> friends = friendsRepo.getByUserId(userId);
-        FriendDto friendDto = new FriendDto();
+        Set<Long> friendsId = new HashSet<>();
+        List<FriendDto> friends = friendsRepo.getByUserId(userId);;
         for (FriendDto friend : friends) {
-            friendDto.setFriendsId(friend.getFriendsId());
-            List<Post> postData = postRepo.getAllPostById(friendDto.getFriendsId());
-
+            friendsId.add(friend.getFriendsId());
+        }
+        for(Long e: friendsId){
+            List<Post> postData = postRepo.getAllPostById(e);
 
             for (Post post1 : postData) {
                 PostDto post = new PostDto();
