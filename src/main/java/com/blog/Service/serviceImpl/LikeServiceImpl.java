@@ -65,7 +65,7 @@ public class LikeServiceImpl implements LikeService {
                 likesRepo.saveLikeComment(like);
                 System.out.println("saved");
             }else{
-                likesRepo.deleteLikesByPostIdAndUserId(like.getUser().getId(), commentId);
+                likesRepo.deleteCommentLikesByPostIdAndUserId(like.getUser().getId(), commentId);
                 System.out.println("deleted");
             }
             result = true;

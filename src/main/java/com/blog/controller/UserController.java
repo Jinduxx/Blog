@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -114,14 +115,25 @@ public class UserController {
 //    }
 
 
-    @DeleteMapping("/user/{id}")
-    public String deleteUser(@PathVariable("id") long id) throws InterruptedException {
-        System.out.println("You have 1 minute to make up your mind");
-        TimeUnit.SECONDS.sleep(60);
-        System.out.println("Do you still want to delete");
-        TimeUnit.SECONDS.sleep(60);
+
+    @DeleteMapping("/user")
+    public String deleteUser(HttpSession session) throws InterruptedException {
+        User user = (User) session.getAttribute("user");
+        System.out.println("You have 60 Seconds to make up your mind");
+        TimeUnit.SECONDS.sleep(30);
+        System.out.println("Do you Still want to delete Account?  Enter Yes/No");
+        Scanner sc = new Scanner(System.in);
+        String ans = sc.nextLine();
+        while(!(ans.equalsIgnoreCase("No") || ans.equalsIgnoreCase("Yes"))){
+            System.out.println("Please Enter Yes/No");
+            ans = sc.nextLine();
+        }
+        if(ans.equalsIgnoreCase("No")){
+            System.out.println("Delete Account Aborted");
+            return "Delete Account Aborted";
+        }
         System.out.println("deleted");
-        return userService.deleteUser(id);
+        return userService.deleteUser(user.getId());
     }
 
     private boolean isValidEmail(String email) {

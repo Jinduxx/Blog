@@ -8,6 +8,6 @@ public interface FriendService {
 
     boolean createFriend(long friendUserId, long userId);
     List<FriendDto> getFriendByUserId(long userId);
-    FriendDto getFriendByUserIdAndFriendId(long userId, long friendId);
+    Object getFriendByUserIdAndFriendId(long userId, long friendId);
     String deleteFriend(long friendId, long userId);
 }

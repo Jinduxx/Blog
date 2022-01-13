@@ -5,6 +5,7 @@ import com.blog.model.Comment;
 import com.blog.model.LikePost;
 import com.blog.model.Post;
 import com.blog.model.User;
+import com.blog.pojo.FavouritePostDto;
 import com.blog.pojo.FriendDto;
 import com.blog.pojo.PostDto;
 import com.blog.repository.repositoryImpl.*;
@@ -44,12 +45,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public boolean createFavouritePost(Post post, long userId) {
+    public boolean createFavouritePost(FavouritePostDto favouritePostDto) {
         boolean result = false;
-        User user = userRepo.getById(userId);
+        User user = userRepo.getById(favouritePostDto.getUserId());
         if(user != null){
-            post.setUser(user);
-            postRepo.saveFavouritePost(post, user);
+            postRepo.saveFavouritePost(favouritePostDto);
             result = true;
         }
         return result;
@@ -98,29 +98,6 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getAllFavouritePostByUserId(long userId) {
-
-        List<Post> postData = postRepo.getAllFavouritePostByUserId(userId);
-        List<Post> posts1 = new ArrayList<>();
-
-        for (Post postEach:postData) {
-
-            Post posts = new Post();
-            posts.setUser(userRepo.getById(userId));
-            System.out.println(posts.getUser());
-            posts.setId(postEach.getId());
-            posts.setTitle(postEach.getTitle());
-            posts.setBody(postEach.getBody());
-            posts.setName(posts.getUser().getFirstName()+ " "+ posts.getUser().getLastName());
-
-            posts1.add(posts);
-        }
-        Collections.reverse(posts1);
-
-        return posts1;
-    }
-
-    @Override
     public List<PostDto> getAllPost(User currentUser) {
 
         List<Post> postData = postRepo.getAllPost();
@@ -133,6 +110,7 @@ public class PostServiceImpl implements PostService {
             post.setId(post1.getId());
             post.setTitle(post1.getTitle());
             post.setBody(post1.getBody());
+            post.setUserId(post1.getUserId());
             post.setName(post.getUser().getFirstName()+ " "+ post.getUser().getLastName());
 
             //the total number of likes on this particular post
@@ -207,8 +185,14 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostDto> getAllFavouritePost(User currentUser) {
 
-        List<Post> postData = postRepo.getAllFavouritePostByUserId(currentUser.getId());
+        List<FavouritePostDto> FavouritePostData = postRepo.getAllFavouritePostByUserId(currentUser.getId());
         List<PostDto> posts1 = new ArrayList<>();
+        List<Post> postData = new ArrayList<>();
+        Post ps = new Post();
+        for(FavouritePostDto pos: FavouritePostData){
+            ps = postRepo.getPostById(pos.getPostId());
+            postData.add(ps);
+        }
 
         for (Post post1:postData) {
             PostDto post = new PostDto();

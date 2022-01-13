@@ -27,10 +27,7 @@ CREATE TABLE IF NOT EXISTS posts (
 DROP TABLE IF EXISTS favourite_posts CASCADE;
 
 CREATE TABLE IF NOT EXISTS favourite_posts (
-                                     original_post_id BIGINT NOT NULL,
-                                     title VARCHAR(130) NOT NULL,
-                                     body VARCHAR(150) NOT NULL,
-                                     create_time TIMESTAMP,
+                                     post_id BIGINT NOT NULL,
                                      post_user_id BIGINT NOT NULL,
                                      user_id BIGINT NOT NULL,
                                      FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE

@@ -36,12 +36,11 @@ public class FriendsRepoImpl implements FriendsRepo {
     public List<FriendDto> getByUserId(long userId) {
         List<FriendDto> friendDto = new ArrayList<>();
         try {
-            friendDto = (List<FriendDto>) jdbcTemplate.queryForObject( GET_FRIENDS_BY_USER_ID_QUERY,
-                    BeanPropertyRowMapper.newInstance(List.class), userId);
+            friendDto = (List<FriendDto>) jdbcTemplate.query( GET_FRIENDS_BY_USER_ID_QUERY,
+                    BeanPropertyRowMapper.newInstance(FriendDto.class), userId);
         } catch (DataAccessException e) {
             e.printStackTrace();
         }
-        assert friendDto != null;
         if(friendDto.size() == 0){
             return null;
         }
@@ -50,9 +49,19 @@ public class FriendsRepoImpl implements FriendsRepo {
 
     @Override
     public FriendDto getByUserIdAndFriendId(long userId, long friendId) {
-        return jdbcTemplate.queryForObject(GET_FRIENDS_BY_USER_ID_AND_FRIENDS_ID_QUERY, (rs, rowNum) -> {
-            return new FriendDto(rs.getLong("id"), rs.getLong("friends_id"), rs.getLong("user_id"));
-        },userId,friendId);
+        List<FriendDto> friendDto = new ArrayList<>();
+        try {
+            friendDto = (List<FriendDto>) jdbcTemplate.query(GET_FRIENDS_BY_USER_ID_AND_FRIENDS_ID_QUERY, (rs, rowNum) ->
+                    new FriendDto(rs.getLong("id"), rs.getLong("friends_id"),
+                            rs.getLong("user_id")),userId,friendId);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
+        System.out.println(friendDto);
+        if(friendDto.size() == 0){
+            return null;
+        }
+        return friendDto.get(0);
     }
 
     @Override

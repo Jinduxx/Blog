@@ -27,7 +27,7 @@ public class LikeRepoImpl implements LikeRepo {
     private static final String GET_LIKE_BY_POSTID_AND_USERID_QUERY = "SELECT * FROM LIKES WHERE USER_ID=? AND POST_ID=?";
     private static final String GET_LIKE_COMMENT_BY_POST_ID_AND_USER_ID_QUERY = "SELECT * FROM LIKES_COMMENT WHERE USER_ID=? AND POST_ID=?";
     private static final String DELETE_LIKE_BY_USERID_AND_POSTID = "DELETE FROM LIKES WHERE USER_ID=? AND POST_ID=?";
-    private static final String DELETE_LIKE_COMMENT_BY_USERID_AND_POSTID = "DELETE FROM LIKES_COMMENT WHERE USER_ID=? AND POST_ID=?";
+    private static final String DELETE_LIKE_COMMENT_BY_USERID_AND_COMMENTID = "DELETE FROM LIKES_COMMENT WHERE USER_ID=? AND COMMENT_ID=?";
 
 
     @Override
@@ -71,8 +71,8 @@ public class LikeRepoImpl implements LikeRepo {
     }
 
     @Override
-    public String deleteCommentLikesByPostIdAndUserId(long userId, long postId) {
-        jdbcTemplate.update(DELETE_LIKE_COMMENT_BY_USERID_AND_POSTID, userId, postId);
+    public String deleteCommentLikesByPostIdAndUserId(long userId, long commentId) {
+        jdbcTemplate.update(DELETE_LIKE_COMMENT_BY_USERID_AND_COMMENTID, userId, commentId);
         return "Comment Likes got deleted";
     }
 }

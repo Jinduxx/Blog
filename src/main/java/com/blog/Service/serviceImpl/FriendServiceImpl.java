@@ -48,13 +48,13 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
-    public FriendDto getFriendByUserIdAndFriendId(long userId, long friendId) {
+    public Object getFriendByUserIdAndFriendId(long userId, long friendId) {
        return friendsRepo.getByUserIdAndFriendId(userId, friendId);
     }
 
     @Override
     public String deleteFriend(long friendId, long userId) {
-        FriendDto friendDto  = friendsRepo.getByUserIdAndFriendId(userId, friendId);
+        Object friendDto  = friendsRepo.getByUserIdAndFriendId(userId, friendId);
         String deletedUser = null;
         if(friendDto != null){
             deletedUser = friendsRepo.deleteByFriendId(friendId, userId);

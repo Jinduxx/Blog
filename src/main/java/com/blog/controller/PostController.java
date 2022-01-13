@@ -3,6 +3,7 @@ package com.blog.controller;
 import com.blog.Service.serviceImpl.PostServiceImpl;
 import com.blog.model.Post;
 import com.blog.model.User;
+import com.blog.pojo.FavouritePostDto;
 import com.blog.pojo.PostDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -41,16 +42,19 @@ public class PostController {
 //        return "redirect:/home";
     }
 
-    @PostMapping("/post/{postId}")
-    public String addFavouritePost(@PathVariable("postId") long postId, HttpSession session) {
+    @PostMapping("/post/{postId}/{postUserId}")
+    public String addFavouritePost(@PathVariable("postId") long postId, @PathVariable("postUserId") long postUserId, HttpSession session) {
 
         User user = (User) session.getAttribute("user");
-        Post post = postService.getPostById(postId);
+        FavouritePostDto favouritePostDto = new FavouritePostDto();
+        favouritePostDto.setPostId(postId);
+        favouritePostDto.setPostUserId(postUserId);
+        favouritePostDto.setUserId(user.getId());
         if(user == null){
             return "redirect:/";
         }
 
-        if(postService.createFavouritePost(post, user.getId())) {
+        if(postService.createFavouritePost(favouritePostDto)) {
             session.setAttribute("message", "Post uploading successfully");
             return "successful";
         }
@@ -64,16 +68,22 @@ public class PostController {
 
 //        return postService.updatePost(post);
         User user = (User) session.getAttribute("user");
-        post.setUser(user);
-        if(user == null) return "redirect:/";
+        Post post1 = postService.getPostById(post.getId());
+        if(post1.getUserId() == user.getId()){
+            post.setUser(user);
+            if(user == null) return "redirect:/";
 
-        if(postService.updatePost(post) != null) {
-            session.setAttribute("message", "Post edited successfully");
-            return "Successful";
-        }else{
-            session.setAttribute("message", "Error editing post!");
-            return "failed";
+            if(postService.updatePost(post) != null) {
+                session.setAttribute("message", "Post edited successfully");
+                return "Successful";
+            }else{
+                session.setAttribute("message", "Error editing post!");
+                return "failed";
+            }
         }
+
+        return "You can't change this post";
+
 //        return "redirect:/home";
     }
 

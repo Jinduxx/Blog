@@ -2,6 +2,7 @@ package com.blog.repository.repositoryImpl;
 
 import com.blog.model.Post;
 import com.blog.model.User;
+import com.blog.pojo.FavouritePostDto;
 import com.blog.repository.PostRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -22,7 +23,7 @@ public class PostRepoImpl implements PostRepo {
     }
 
     private static final String INSERT_POST_QUERY = "INSERT INTO POSTS(title,body,user_id) values(?,?,?)";
-    private static final String INSERT_FAVOURITE_POST_QUERY = "INSERT INTO FAVOURITE_POSTS(original_post_id,title,body,post_user_id,user_id) values(?,?,?,?,?)";
+    private static final String INSERT_FAVOURITE_POST_QUERY = "INSERT INTO FAVOURITE_POSTS(post_id,post_user_id,user_id) values(?,?,?)";
     private static final String UPDATE_POST_BY_ID_QUERY = "UPDATE POSTS SET title=?,body=?,user_id=? WHERE ID=?";
     private static final String GET_POST_BY_ID_QUERY = "SELECT * FROM POSTS WHERE ID=?";
     private static final String GET_POST_BY_USERID_QUERY = "SELECT * FROM POSTS WHERE USER_ID=?";
@@ -36,8 +37,8 @@ public class PostRepoImpl implements PostRepo {
     }
 
     @Override
-    public void saveFavouritePost(Post post, User user) {
-        jdbcTemplate.update(INSERT_FAVOURITE_POST_QUERY,post.getId(), post.getTitle(), post.getBody(),/****/ post.getUserId(), user.getId());
+    public void saveFavouritePost(FavouritePostDto favouritePostDto) {
+        jdbcTemplate.update(INSERT_FAVOURITE_POST_QUERY,favouritePostDto.getPostId(), favouritePostDto.getPostUserId(), favouritePostDto.getUserId());
     }
 
     @Override
@@ -59,9 +60,9 @@ public class PostRepoImpl implements PostRepo {
     }
 
     @Override
-    public List<Post> getAllFavouritePostByUserId(long userId) {
+    public List<FavouritePostDto> getAllFavouritePostByUserId(long userId) {
         return  jdbcTemplate.query(GET_FAVOURITE_POST_BY_USER_ID_QUERY,
-                BeanPropertyRowMapper.newInstance(Post.class), userId);
+                BeanPropertyRowMapper.newInstance(FavouritePostDto.class), userId);
 //        return jdbcTemplate.query(GET_FAVOURITE_POST_BY_USER_ID_QUERY, (rs, rowNum) -> {
 //            return new Post(rs.getLong("original_post_id"), rs.getString("title"),
 //                    rs.getString("body"), rs.getTimestamp("create_time"),
