@@ -98,6 +98,30 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<PostDto> getAllPostByTitle(String title, long userId) {
+
+        List<Post> postData = postRepo.getPostByTitle(title);
+        List<PostDto> posts = new ArrayList<>();
+
+        for (Post postEach:postData) {
+
+            PostDto post = new PostDto();
+            post.setUser(userRepo.getById(userId));
+            System.out.println(post.getUser());
+            post.setId(postEach.getId());
+            post.setTitle(postEach.getTitle());
+            post.setBody(postEach.getBody());
+            post.setName(post.getUser().getFirstName()+ " "+ post.getUser().getLastName());
+            post.setUserId(postEach.getUserId());
+
+            posts.add(post);
+        }
+        Collections.reverse(posts);
+
+        return posts;
+    }
+
+    @Override
     public List<PostDto> getAllPost(User currentUser) {
 
         List<Post> postData = postRepo.getAllPost();

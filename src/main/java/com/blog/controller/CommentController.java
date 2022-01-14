@@ -51,6 +51,23 @@ public class CommentController {
 //      return "comment";
     }
 
+    @GetMapping("/commentResult/{postId}")
+    public List<CommentDto> showSearchedComment(@PathVariable("postId") long postId, @RequestBody Comment comment, HttpSession session, Model model) {
+
+        User user = (User) session.getAttribute("user");
+        if(user == null) throw new NullPointerException("user is null");
+//        return "redirect:/";
+        List<CommentDto> commentList = commentService.searchComments(postId, user.getId(),comment.getComment(), user);
+        if (commentList.size() == 0){
+            return null;
+//            return "redirect:/home";
+        }
+        model.addAttribute("commentData", commentList);
+        model.addAttribute("user", user);
+        return commentList;
+//      return "comment";
+    }
+
     @PutMapping( "/comment/{commentId}/{postId}")
     public String editComment(@PathVariable("commentId") long commentId, @PathVariable("postId") long postId,
                               @RequestBody Comment comment, HttpSession session) {

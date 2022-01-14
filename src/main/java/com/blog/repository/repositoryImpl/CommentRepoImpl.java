@@ -23,6 +23,7 @@ public class CommentRepoImpl implements CommentRepo {
     private static final String INSERT_COMMENT_QUERY = "INSERT INTO COMMENTS(comment,user_id,post_id) values(?,?,?)";
     private static final String UPDATE_COMMENT_BY_ID_QUERY = "UPDATE COMMENTS SET comment=? WHERE ID=?";
     private static final String GET_COMMENT_BY_POSTID_QUERY = "SELECT * FROM COMMENTS WHERE POST_ID=?";
+    private static final String GET_COMMENT_BY_COMMENTS_QUERY = "SELECT * FROM COMMENTS WHERE COMMENT=?";
     private static final String GET_COMMENT_BY_ID_QUERY = "SELECT * FROM COMMENTS WHERE ID=?";
     private static final String DELETE_COMMENT_BY_ID = "DELETE FROM COMMENTS WHERE ID=?";
 
@@ -48,6 +49,12 @@ public class CommentRepoImpl implements CommentRepo {
     public Comment findCommentById(Long commentId) {
         return jdbcTemplate.queryForObject(GET_COMMENT_BY_ID_QUERY,
                 BeanPropertyRowMapper.newInstance(Comment.class), commentId);
+    }
+
+    @Override
+    public List<Comment> findCommentByComment(String comment) {
+        return jdbcTemplate.query(GET_COMMENT_BY_COMMENTS_QUERY,
+                BeanPropertyRowMapper.newInstance(Comment.class), comment);
     }
 
     @Override

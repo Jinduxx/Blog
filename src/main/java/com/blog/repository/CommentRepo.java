@@ -8,8 +8,9 @@ import java.util.List;
 public interface CommentRepo {
 
     void saveComment(Comment comment);
-    public Comment updatePost(Comment comment);
+    Comment updatePost(Comment comment);
     List<Comment> findAllCommentByPostId(Long postId);
+    List<Comment> findCommentByComment(String comment);
     Comment findCommentById(Long commentId);
     @Transactional
     String deleteCommentById(Long id);

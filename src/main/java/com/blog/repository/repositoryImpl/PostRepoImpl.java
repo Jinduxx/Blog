@@ -26,6 +26,7 @@ public class PostRepoImpl implements PostRepo {
     private static final String INSERT_FAVOURITE_POST_QUERY = "INSERT INTO FAVOURITE_POSTS(post_id,post_user_id,user_id) values(?,?,?)";
     private static final String UPDATE_POST_BY_ID_QUERY = "UPDATE POSTS SET title=?,body=?,user_id=? WHERE ID=?";
     private static final String GET_POST_BY_ID_QUERY = "SELECT * FROM POSTS WHERE ID=?";
+    private static final String GET_POST_BY_TITLE_QUERY = "SELECT * FROM POSTS WHERE TITLE=?";
     private static final String GET_POST_BY_USERID_QUERY = "SELECT * FROM POSTS WHERE USER_ID=?";
     private static final String GET_FAVOURITE_POST_BY_USER_ID_QUERY = "SELECT * FROM FAVOURITE_POSTS WHERE USER_ID=?";
     private static final String GET_POST_QUERY = "SELECT * FROM POSTS";
@@ -51,6 +52,12 @@ public class PostRepoImpl implements PostRepo {
     public Post getPostById(long postId) {
         return jdbcTemplate.queryForObject(GET_POST_BY_ID_QUERY,
                 BeanPropertyRowMapper.newInstance(Post.class), postId);
+    }
+
+    @Override
+    public List<Post> getPostByTitle(String title) {
+        return jdbcTemplate.query(GET_POST_BY_TITLE_QUERY,
+                BeanPropertyRowMapper.newInstance(Post.class), title);
     }
 
     @Override

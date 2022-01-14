@@ -1,7 +1,6 @@
 package com.blog.repository;
 
 import com.blog.model.Post;
-import com.blog.model.User;
 import com.blog.pojo.FavouritePostDto;
 
 import java.util.List;
@@ -16,11 +15,13 @@ public interface PostRepo {
 
     List<Post> getAllPostById (long userId);
 
-    public void saveFavouritePost(FavouritePostDto favouritePostDto);
+    List<Post> getPostByTitle(String title);
 
-    public List<FavouritePostDto> getAllFavouritePostByUserId(long userId);
+    void saveFavouritePost(FavouritePostDto favouritePostDto);
 
-    public List<Post> getAllPost();
+    List<FavouritePostDto> getAllFavouritePostByUserId(long userId);
+
+    List<Post> getAllPost();
 
     String deleteById(long id);
 }

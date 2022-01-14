@@ -2,8 +2,10 @@ package com.blog.controller;
 
 import com.blog.Service.serviceImpl.UserServiceImpl;
 import com.blog.model.User;
+import com.blog.pojo.DeleteUser;
 import com.blog.pojo.LoginDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -109,13 +111,6 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-//    @GetMapping("/users")
-//    public List<User> getUsers() {
-//        return userRepository.allUsers();
-//    }
-
-
-
     @DeleteMapping("/user")
     public String deleteUser(HttpSession session) throws InterruptedException {
         User user = (User) session.getAttribute("user");
@@ -135,6 +130,46 @@ public class UserController {
         System.out.println("deleted");
         return userService.deleteUser(user.getId());
     }
+
+
+//    @Scheduled(fixedDelay = 10000)
+//    public void deleteDelay(){
+//        System.out.println("You have 10 Seconds to make up your mind");
+//
+//    }
+//
+//    @DeleteMapping("/user")
+//    public String deleteUser(@RequestBody DeleteUser deleteUser, HttpSession session) {
+//        if(deleteUser.equals("")){
+//            deleteDelay();
+//            return "You have 10 Seconds to make up your mind";
+//        }
+//        return delUser(deleteUser, session);
+//    }
+
+
+//    public String delUser(DeleteUser deleteUser, HttpSession session){
+//        User user = (User) session.getAttribute("user");
+//        if(!(deleteUser.getResponse().equalsIgnoreCase("yes") ||
+//                deleteUser.getResponse().equalsIgnoreCase("no"))){
+//            return "Please Enter yes or no";
+//        }else  if(deleteUser.getResponse().equalsIgnoreCase("no")){
+//            return "Deactivation canceled";
+//        }
+//        System.out.println("Do you Still want to delete Account?  Enter Yes/No");
+//        Scanner sc = new Scanner(System.in);
+//        String ans = sc.nextLine();
+//        while(!(ans.equalsIgnoreCase("No") || ans.equalsIgnoreCase("Yes"))){
+//            System.out.println("Please Enter Yes/No");
+//            ans = sc.nextLine();
+//        }
+//        if(ans.equalsIgnoreCase("No")){
+//            System.out.println("Delete Account Aborted");
+//            return "Delete Account Aborted";
+//        }
+//        System.out.println("deleted");
+//        return userService.deleteUser(user.getId());
+//    }
 
     private boolean isValidEmail(String email) {
         String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";

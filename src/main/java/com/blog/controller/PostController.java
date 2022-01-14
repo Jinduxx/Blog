@@ -97,6 +97,16 @@ public class PostController {
         return post;
     }
 
+    @GetMapping("/searchedPost")
+    public Object showAllSearchedPost(@RequestBody Post posts, HttpSession session, Model model) {
+        User user = (User) session.getAttribute("user");
+        List<PostDto> post = postService.getAllPostByTitle(posts.getTitle(), user.getId());
+
+        model.addAttribute("postData", post);
+        model.addAttribute("user", user);
+        return post;
+    }
+
     @GetMapping("/friendsPosts")
     public Object showAllFriendsPost(HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");

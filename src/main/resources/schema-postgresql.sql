@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
                          last_name VARCHAR(150) NOT NULL,
                          email VARCHAR(36) NOT NULL UNIQUE,
                          password VARCHAR(50) NOT NULL,
-                         create_time TIMESTAMP,
+                         create_time TIMESTAMP NOT NULL DEFAULT NOW(),
                          contact VARCHAR(50)
 );
 
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS posts (
                          id serial PRIMARY KEY,
                          title VARCHAR(130) NOT NULL,
                          body VARCHAR(150) NOT NULL,
-                         create_time TIMESTAMP,
+                         create_time TIMESTAMP NOT NULL DEFAULT NOW(),
                          user_id BIGINT NOT NULL,
                          FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
